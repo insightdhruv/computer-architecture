@@ -1,0 +1,188 @@
+AND Gate(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity AND_Gate is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+Y : out STD_LOGIC);
+end AND_Gate;
+architecture Behavioral of AND_Gate is
+begin
+Y <= A and B;
+end Behavioral;
+
+
+
+AND Gate(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity OR_Gate is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+Y : out STD_LOGIC);
+end OR_Gate;
+architecture Behavioral of OR_Gate is
+begin
+Y <= A or B;
+end Behavioral;
+
+
+NAND Gate(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity NAND_Gate is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+Y : out STD_LOGIC);
+end NAND_Gate;
+architecture Behavioral of NAND_Gate is
+begin
+Y <= not (A and B);
+end Behavioral;
+
+NOR Gate(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity NOR_Gate is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+Y : out STD_LOGIC);
+end NOR_Gate;
+architecture Behavioral of NOR_Gate is
+begin
+Y <= not (A or B);
+end Behavioral;
+
+
+Half Adder(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity Half_Adder is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+Sum : out STD_LOGIC;
+Carry : out STD_LOGIC);
+end Half_Adder;
+architecture Behavioral of Half_Adder is
+begin
+Sum <= A xor B;
+Carry <= A and B;
+end Behavioral;
+
+Full Adder(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity Full_Adder is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+Cin : in STD_LOGIC;
+Sum : out STD_LOGIC;
+Carry : out STD_LOGIC);
+end Full_Adder;
+architecture Behavioral of Full_Adder is
+begin
+Sum <= A xor B xor Cin;
+Carry <= (A and B) or (B and Cin) or (A and Cin);
+end Behavioral;
+
+Multiplexer(4:1)
+VHDL:
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity MUX_4x1 is
+Port ( A : in STD_LOGIC;
+B : in STD_LOGIC;
+C : in STD_LOGIC;
+D : in STD_LOGIC;
+Sel : in STD_LOGIC_VECTOR(1 downto 0);
+Y : out STD_LOGIC);
+end MUX_4x1;
+architecture Behavioral of MUX_4x1 is
+begin
+process(A, B, C, D, Sel)
+begin
+case Sel is
+when "00" => Y <= A;
+when "01" => Y <= B;
+when "10" => Y <= C;
+when "11" => Y <= D;
+when others => Y <= '0'; -- Default case
+end case;
+end process;
+end Behavioral;
+Varilog Code:
+module MUX_4x1(
+input wire A, B, C, D,
+input wire [1:0] Sel,
+output reg Y
+);
+always @(*) begin
+case (Sel)
+2'b00: Y = A;
+2'b01: Y = B;
+2'b10: Y = C;
+2'b11: Y = D;
+default: Y = 0;
+endcase
+end
+endmodule
+
+Decoder(3:8)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity Decoder_3x8 is
+Port ( A : in STD_LOGIC_VECTOR(2 downto 0);
+Y : out STD_LOGIC_VECTOR(7 downto 0));
+end Decoder_3x8;
+architecture Behavioral of Decoder_3x8 is
+begin
+Y <= "00000001" when A = "000" else
+"00000010" when A = "001" else
+"00000100" when A = "010" else
+"00001000" when A = "011" else
+"00010000" when A = "100" else
+"00100000" when A = "101" else
+"01000000" when A = "110" else
+"10000000";
+end Behavioral;
+
+
+Coparator(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity Comparator_2bit is
+Port ( A, B : in STD_LOGIC_VECTOR(1 downto 0);
+Eq : out STD_LOGIC;
+Gt : out STD_LOGIC;
+Lt : out STD_LOGIC);
+end Comparator_2bit;
+architecture Behavioral of Comparator_2bit is
+begin
+Eq <= '1' when A = B else '0';
+Gt <= '1' when A > B else '0';
+Lt <= '1' when A < B else '0';
+end Behavioral;
+
+
+Carry-look-ahead Adder(VHDL)
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+entity Carry_Look_Ahead_Adder is
+Port ( A, B : in STD_LOGIC_VECTOR(3 downto 0);
+Cin : in STD_LOGIC;
+Sum : out STD_LOGIC_VECTOR(3 downto 0);
+Cout : out STD_LOGIC);
+end Carry_Look_Ahead_Adder;
+architecture Behavioral of Carry_Look_Ahead_Adder is
+signal G, P, C : STD_LOGIC_VECTOR(3 downto 0);
+begin
+G <= A and B; -- Generate
+P <= A xor B; -- Propagate
+C(0) <= Cin;
+C(1) <= G(0) or (P(0) and C(0));
+C(2) <= G(1) or (P(1) and C(1));
+C(3) <= G(2) or (P(2) and C(2));
+Cout <= G(3) or (P(3) and C(3));
+Sum <= P xor C;
+end Behavioral;
+
